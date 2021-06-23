@@ -976,6 +976,7 @@ genrule(
         "src/trace_processor/metrics/android/android_startup_launches.sql",
         "src/trace_processor/metrics/android/android_surfaceflinger.sql",
         "src/trace_processor/metrics/android/android_sysui_cuj.sql",
+        "src/trace_processor/metrics/android/android_sysui_cuj_jank_query.sql",
         "src/trace_processor/metrics/android/android_task_names.sql",
         "src/trace_processor/metrics/android/android_thread_time_in_state.sql",
         "src/trace_processor/metrics/android/android_trace_quality.sql",
@@ -3353,6 +3354,26 @@ perfetto_proto_library(
     visibility = [
         PERFETTO_CONFIG.proto_library_visibility,
     ],
+    deps = [
+        ":protos_perfetto_trace_track_event_protos",
+    ],
+)
+
+# GN target: //protos/third_party/chromium:lite
+perfetto_cc_proto_library(
+    name = "protos_third_party_chromium_lite",
+    deps = [
+        ":protos_third_party_chromium_protos",
+    ],
+)
+
+# GN target: //protos/third_party/chromium:lite
+perfetto_proto_library(
+    name = "protos_third_party_chromium_protos",
+    srcs = [
+        "protos/third_party/chromium/chrome_track_event.proto",
+    ],
+    visibility = PERFETTO_CONFIG.public_visibility,
     deps = [
         ":protos_perfetto_trace_track_event_protos",
     ],
