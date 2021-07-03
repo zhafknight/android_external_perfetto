@@ -169,6 +169,39 @@ perfetto_cc_binary(
     ],
 )
 
+# GN target: //tools/proto_filter:proto_filter
+perfetto_cc_binary(
+    name = "proto_filter",
+    srcs = [
+        ":src_protozero_filtering_bytecode_common",
+        ":src_protozero_filtering_bytecode_generator",
+        ":src_protozero_filtering_bytecode_parser",
+        ":src_protozero_filtering_filter_util",
+        ":src_protozero_filtering_message_filter",
+        "tools/proto_filter/proto_filter.cc",
+    ],
+    deps = [
+        ":protozero",
+        ":src_base_base",
+    ] + PERFETTO_CONFIG.deps.protobuf_full,
+)
+
+# GN target: //tools/proto_merger:proto_merger
+perfetto_cc_binary(
+    name = "proto_merger",
+    srcs = [
+        "tools/proto_merger/allowlist.h",
+        "tools/proto_merger/main.cc",
+        "tools/proto_merger/proto_file.cc",
+        "tools/proto_merger/proto_file.h",
+        "tools/proto_merger/proto_merger.cc",
+        "tools/proto_merger/proto_merger.h",
+    ],
+    deps = [
+        ":src_base_base",
+    ] + PERFETTO_CONFIG.deps.protobuf_full,
+)
+
 # GN target: //:libperfetto
 perfetto_cc_library(
     name = "libperfetto",
@@ -751,6 +784,8 @@ filegroup(
 filegroup(
     name = "src_profiling_symbolizer_symbolizer",
     srcs = [
+        "src/profiling/symbolizer/breakpad_parser.cc",
+        "src/profiling/symbolizer/breakpad_parser.h",
         "src/profiling/symbolizer/filesystem.h",
         "src/profiling/symbolizer/filesystem_posix.cc",
         "src/profiling/symbolizer/filesystem_windows.cc",
@@ -784,12 +819,30 @@ filegroup(
     ],
 )
 
+# GN target: //src/protozero/filtering:bytecode_generator
+filegroup(
+    name = "src_protozero_filtering_bytecode_generator",
+    srcs = [
+        "src/protozero/filtering/filter_bytecode_generator.cc",
+        "src/protozero/filtering/filter_bytecode_generator.h",
+    ],
+)
+
 # GN target: //src/protozero/filtering:bytecode_parser
 filegroup(
     name = "src_protozero_filtering_bytecode_parser",
     srcs = [
         "src/protozero/filtering/filter_bytecode_parser.cc",
         "src/protozero/filtering/filter_bytecode_parser.h",
+    ],
+)
+
+# GN target: //src/protozero/filtering:filter_util
+filegroup(
+    name = "src_protozero_filtering_filter_util",
+    srcs = [
+        "src/protozero/filtering/filter_util.cc",
+        "src/protozero/filtering/filter_util.h",
     ],
 )
 
