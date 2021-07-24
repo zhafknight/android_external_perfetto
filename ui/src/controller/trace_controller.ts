@@ -26,7 +26,7 @@ import {HttpRpcEngine} from '../common/http_rpc_engine';
 import {NUM, NUM_NULL, STR, STR_NULL} from '../common/query_result';
 import {EngineMode} from '../common/state';
 import {TimeSpan, toNs, toNsCeil, toNsFloor} from '../common/time';
-import {WasmEngineProxy} from '../common/wasm_engine_proxy';
+import {resetEngineWorker, WasmEngineProxy} from '../common/wasm_engine_proxy';
 import {QuantizedLoad, ThreadDesc} from '../frontend/globals';
 import {
   publishHasFtrace,
@@ -130,7 +130,6 @@ export class TraceController extends Controller<States> {
       case 'ready':
         // At this point we are ready to serve queries and handle tracks.
         const engine = assertExists(this.engine);
-        assertTrue(engineCfg.ready);
         const childControllers: Children = [];
 
         // Create a TrackController for each track.
@@ -227,7 +226,7 @@ export class TraceController extends Controller<States> {
     } else {
       console.log('Opening trace using built-in WASM engine');
       engineMode = 'WASM';
-      const enginePort = globals.resetEngineWorker();
+      const enginePort = resetEngineWorker();
       this.engine = new WasmEngineProxy(
           this.engineId, enginePort, LoadingManager.getInstance);
     }
